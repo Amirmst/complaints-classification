@@ -1,0 +1,10 @@
+Unique ID	State Code	No of Employees Code	No of Employees	NAICS Code	NAICS Description	Institution Type Code	Institution Type	CP Date of Birth	CP Sex	Date First Office	Date FEPA Sent to EEOC	Closure Date	Closure Code	Closure Type	Monetary Benefits	Statute Code	Statute	Basis Code	Basis	Issue Code	Issue	Court Filing Date	Civil Action Number	Court	Litigation Resolution Date	Litigation Monetary Benefits	Litigation Case Type
+3,288,411.72	MD	B	101 - 200 Employees	611110	Elementary and Secondary Schools	E	Private Employer	11/13/66	N	03/03/10		03/03/10	M3	No Cause Finding Issued		A	ADEA	OA	Age	T2	Terms/Conditions						
+3,593,445.5595	AL	U	Unknown Number Of Employees			E	Private Employer	05/02/79	F	02/03/10		07/30/10	N2	NRTS Issued At CP Request		T	Title VII	OR	Retaliation	D2	Discharge						
+3,593,445.5595	AL	U	Unknown Number Of Employees			E	Private Employer	05/02/79	F	02/03/10		07/30/10	N2	NRTS Issued At CP Request		T	Title VII	OR	Retaliation	B3	Benefits-Insurance						
+3,593,445.5595	AL	U	Unknown Number Of Employees			E	Private Employer	05/02/79	F	02/03/10		07/30/10	N2	NRTS Issued At CP Request		T	Title VII	GF	Sex-Female	B3	Benefits-Insurance						
+3,848,821.6365	PA	D	501+ Employees	611110	Elementary and Secondary Schools	M	Private Elem/Secondary School	09/24/76	F	10/27/09		11/12/09	N2	NRTS Issued At CP Request		T	Title VII	GF	Sex-Female	S4	Sexual Harassment						
+3,921,942.306	PA	C	201 - 500 Employees	922120	Police Protection	G	State/Local Govt	06/29/53	M	01/27/10		03/25/10	N2	NRTS Issued At CP Request		A	ADEA	OA	Age	R5	Retirement-Involuntary						
+3,966,022.5975	AR	A	15 - 100 Employees			E	Private Employer		N	09/03/10		09/23/10	N2	NRTS Issued At CP Request		T	Title VII	RB	Race-Black/African American	O1	Other												
+4,000,398.4845	PA	D	501+ Employees	481111	Scheduled Passenger Air Transportation	E	Private Employer	11/12/66	F	05/25/10						T	Title VII	RB	Race-Black/African American	D2	Discharge						
+4,058,226.168	PA	D	501+ Employees	452910	Warehouse Clubs and Supercenters	E	Private Employer	11/14/86	F	11/20/09		11/24/09	M3	No Cause Finding Issued		D	ADA	W5	Intellectual Disability	H2	Hiring	
