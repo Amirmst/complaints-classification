@@ -14767,6 +14767,16 @@ Classification Report:
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="SVM-Result-Analysis">SVM Result Analysis<a class="anchor-link" href="#SVM-Result-Analysis">&#182;</a></h4><p>Before resolving our class imbalance problem, we were getting 75.15% accuracy and an F1 score of 0.429.</p>
+<p>After resolving the class imbalance, the accuracy for this classifier is only 55% so it's only slightly better than guessing. The AUC is also not high, which means that there is a lot of misclassification occuring for class 1.</p>
+<p>Because of these factors, we do not believe this to be a reliable classifier for our data.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="MLP-Classifier-(Neural-Nets)">MLP Classifier (Neural Nets)<a class="anchor-link" href="#MLP-Classifier-(Neural-Nets)">&#182;</a></h2>
 </div>
 </div>
@@ -14776,26 +14786,35 @@ Classification Report:
 <div class="prompt input_prompt">In&nbsp;[72]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">MLPClassifier</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># initialize the two components of the pipeline: the scalar, and the MLP classifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">MLPClassifier</span>
 
 <span class="n">mlp</span> <span class="o">=</span> <span class="n">MLPClassifier</span><span class="p">()</span>
 
+<span class="c1"># create the pipeline and construct the param_grid</span>
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;scaler&#39;</span><span class="p">,</span> <span class="n">scaler</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;mlp&#39;</span><span class="p">,</span> <span class="n">mlp</span><span class="p">)])</span>
 <span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;mlp__hidden_layer_sizes&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
     <span class="s1">&#39;mlp__activation&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;logistic&quot;</span><span class="p">,</span> <span class="s2">&quot;tanh&quot;</span><span class="p">,</span> <span class="s2">&quot;relu&quot;</span><span class="p">]</span>
 <span class="p">}</span>
 
+<span class="c1"># create a grid search cv with our pipeline, 5 folds, param_grid, and score on accuracy. Fit to all data.</span>
 <span class="n">grid_search</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">param_grid</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">)</span>
 <span class="n">grid_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+
+<span class="c1"># display the best params chosen by the grid search cv </span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best params: &quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">grid_search</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span> 
-<span class="n">predictions</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">grid_search</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
+<span class="c1"># make predictions using the selected params, and get probabilities</span>
+<span class="c1"># that a row is in a class</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">grid_search</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">predict_probas</span> <span class="o">=</span> <span class="n">grid_search</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">features_test</span><span class="p">)</span>
 
+<span class="c1">#replace these fpr and tpr with the results of your roc_curve</span>
 <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">labels_test</span><span class="p">,</span> <span class="n">predict_probas</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
 
+<span class="c1"># display the auc score and plot the results</span>
 <span class="n">auc_score</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">labels_test</span><span class="p">,</span> <span class="n">predict_probas</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AUC Score: &quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">auc_score</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
@@ -15247,6 +15266,15 @@ Classification Report:
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="MLP-Result-Analysis">MLP Result Analysis<a class="anchor-link" href="#MLP-Result-Analysis">&#182;</a></h4><p>Prior to fixing the class imbalance problem, we had an accuracy of close to 75%. After resolving class imbalance, we now have an accuracy of ~59%</p>
+<p>This is a small decrease in accuracy from KNN, but a noticeably smaller ROC curve. This means that while the overall accuracy might be higher, the false positive and false negative values are higher, which we don't want.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Ensemble-Classifier---Random-Forest">Ensemble Classifier - Random Forest<a class="anchor-link" href="#Ensemble-Classifier---Random-Forest">&#182;</a></h2>
 </div>
 </div>
@@ -15343,6 +15371,14 @@ Classification Report:
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="MLP-Result-Analysis">MLP Result Analysis<a class="anchor-link" href="#MLP-Result-Analysis">&#182;</a></h4><p>When running the random forest version, we had a decently high accuracy of ~83% and very high ROC curve. This is what we want, as we have a high chance of classifying correctly, and a low chance of classifying falsely. The random forest classifier is our second best, followed by ADA.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Ensemble-Classifier---ADA-Boost">Ensemble Classifier - ADA Boost<a class="anchor-link" href="#Ensemble-Classifier---ADA-Boost">&#182;</a></h2>
 </div>
 </div>
@@ -15353,10 +15389,6 @@ Classification Report:
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">AdaBoostClassifier</span>
-<span class="n">ada_boost</span> <span class="o">=</span> <span class="n">AdaBoostClassifier</span><span class="p">(</span><span class="n">n_estimators</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span>
-<span class="n">predictions</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">ada_boost</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">predictions</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
-
 
 
 <span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;base_estimator__criterion&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;gini&quot;</span><span class="p">,</span> <span class="s2">&quot;entropy&quot;</span><span class="p">],</span>
@@ -15450,34 +15482,32 @@ AUC Score:
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="ADA-Boost-Result-Analysis">ADA Boost Result Analysis<a class="anchor-link" href="#ADA-Boost-Result-Analysis">&#182;</a></h4><p>Before resolving our class imbalance problem, we were getting ~75% accuracy</p>
+<p>After resolving the class imbalance, the accuracy for this classifier is 95.56%, which is a large improvement. Additionally, the AUC score is higher than all other classifiers, showing that our false positive rate is only about 20% from guessing visually.</p>
+<p>Due to the high accuracy, high AUC score, and relatively low false positive rate, our best classifier is ADA Boost.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Final-Model">Final Model<a class="anchor-link" href="#Final-Model">&#182;</a></h1>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[75]:</div>
+<div class="prompt input_prompt">In&nbsp;[76]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">svc = SVC()</span>
-<span class="sd">pipeline = Pipeline(steps=[(&#39;scaler&#39;, scaler), (&#39;pca&#39;, decomp_pca), (&#39;svm&#39;, svc)])</span>
-<span class="sd">param_grid = {</span>
-<span class="sd">    &#39;pca__n_components&#39;: list(range(5, 19)),</span>
-<span class="sd">    &#39;svm__kernel&#39;: [&#39;linear&#39;, &#39;rbf&#39;, &#39;poly&#39;]</span>
-<span class="sd">}</span>
-<span class="sd">grid_search = GridSearchCV(pipeline, param_grid, cv=5, scoring=&#39;accuracy&#39;)</span>
-<span class="sd">grid_search.fit(features, labels)</span>
-<span class="sd">print(&quot;Best params: &quot;)</span>
-<span class="sd">print(grid_search.best_params_) </span>
-<span class="sd">print(&quot;\nBest Accuracy: &quot;)</span>
-<span class="sd">print(grid_search.best_score_*100) </span>
-<span class="sd">#replace this final_model with your final model</span>
-<span class="sd">final_model = grid_search</span>
-<span class="sd">filename = &#39;finalized_model.sav&#39;</span>
-<span class="sd">pickle.dump(final_model, open(filename, &#39;wb&#39;))</span>
-<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="c1">#set final model to the latest (most accurate) grid search (ADA Boosting)</span>
+<span class="n">final_model</span> <span class="o">=</span> <span class="n">grid_search</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;finalized_model.sav&#39;</span>
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">final_model</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model outputted&quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -15490,20 +15520,37 @@ AUC Score:
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[75]:</div>
+    <div class="prompt"></div>
 
 
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&#39;\nsvc = SVC()\npipeline = Pipeline(steps=[(\&#39;scaler\&#39;, scaler), (\&#39;pca\&#39;, decomp_pca), (\&#39;svm\&#39;, svc)])\nparam_grid = {\n    \&#39;pca__n_components\&#39;: list(range(5, 19)),\n    \&#39;svm__kernel\&#39;: [\&#39;linear\&#39;, \&#39;rbf\&#39;, \&#39;poly\&#39;]\n}\ngrid_search = GridSearchCV(pipeline, param_grid, cv=5, scoring=\&#39;accuracy\&#39;)\ngrid_search.fit(features, labels)\nprint(&#34;Best params: &#34;)\nprint(grid_search.best_params_) \nprint(&#34;\nBest Accuracy: &#34;)\nprint(grid_search.best_score_*100) \n#replace this final_model with your final model\nfinal_model = grid_search\nfilename = \&#39;finalized_model.sav\&#39;\npickle.dump(final_model, open(filename, \&#39;wb\&#39;))\n&#39;</pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Model outputted
+</pre>
 </div>
-
 </div>
 
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Outcome">Outcome<a class="anchor-link" href="#Outcome">&#182;</a></h1><h3 id="Our-Methodology">Our Methodology<a class="anchor-link" href="#Our-Methodology">&#182;</a></h3><h4 id="Cleaning">Cleaning<a class="anchor-link" href="#Cleaning">&#182;</a></h4><p>Our inital dataset contained over 300,000 lines of data. Due to the limitations of using our own machines, we took a sample of 25,000 lines of data to work with and cleaned the data from there.</p>
+<p>When cleaning the data, we dropped all columns that wouldn't be "predictive features" or were repetetive in nature. Many of our columns featured parings such as "basis" and "basis_code", which were essentially the same thing but the code version was abbreviated. For the purposes of our project, we worked with the encoded columns.</p>
+<p>We chose to get the employee's age from the original "date of birth" column, as we believed a numerical value would be much easier to work with.</p>
+<p>We also had to refine our class categories into 2 distinct classes. Originally there were 13 various case outcomes, but we determined which case outcomes ended in favor of the employee or the employer and discarded any cases whose outcomes do not fit these two categories.</p>
+<p>Two of our features, issue_code and basis_code, also had a wide variety of outcomes. For the purposes of clarity and reducing dimensionality, we grouped them into distinct classes as described in "Fix 'Issue Code' column" and "Fix 'Basis Code' column". We also abbreviated the NAISCs code, as only the first 3 numbers of the codes were necessary to identify a company's sector and subsector.</p>
+<h4 id="Data-Analysis">Data Analysis<a class="anchor-link" href="#Data-Analysis">&#182;</a></h4><p>We initially ran all models without looking at the proportion of class 0 to class 1 in the final data. When this occurred, we got higher accuracy on a few models (Decision Tree, Naive Bayes, KNN, MLP), but our false positive rate was extremely high.</p>
+<p>After looking at the proportion of class 0 to class 1, we found out that class 0 greatly outnumbered class 1 at around 3:1. We recognized this as a class imbalance problem, and decided to resolve it using resampling the minority class (class 1) with replacement.</p>
+<p>Once we resolved the class imbalance problem, our accuracy for the Decision Tree, Naive Bayes, KNN, and MLP classifiers dropped. However, the false positive rate dropped significantly. We believe this outcome better represented our dataset. We included the accuracy, ROC curve, and AUC score for each classifier in order to compare different factors.</p>
+<p>We looked into using a cost matrix since we figured out it would be better to someone not to move forward with a lawsuit rather than telling them to move forward with it and they lose. However, after some research we found out cost matrix is not implemented into SKLearn.</p>
+<h3 id="Result-Analysis">Result Analysis<a class="anchor-link" href="#Result-Analysis">&#182;</a></h3><p>From testing our dataset with multiple classifiers, we have found two classifiers that lead to fairly desirable results - Ensemble (random forest) and ADA boost. Out of these two classifiers, ADA proved to be the best with a high accuracy of ~95.56% and a high AUC score of 88.27.</p>
+<p>We attempted to extract what features make a case more or less likely to end in favor of the employee; however, through our research we found that these factors were basically impossible to reverse engineer from the ADA boost classifier, meaning that we were unable to examine what biases could possibly exist in employee complaints cases.</p>
+<p>When we realized we had run into the class imbalance problem, it became apparent that the number of cases ruled in favor of the employer greatly outweighed the number of cases ruled in favor of the employee. Although we can't point to distinct factors that would make a case more or less likely for an employee to win, we could perhaps run an employee's case information through the ADA Boost classifier to give them an idea of whether or not it was likely their case would end in their favor.</p>
+
+</div>
+</div>
 </div>
     </div>
   </div>
